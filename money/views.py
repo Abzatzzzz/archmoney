@@ -1,20 +1,18 @@
 from django.shortcuts import render
-from .models import *
+from . import models
 from django.db.models import Sum
 
 from datetime import date
 
 
 def index(request):
+    # year = int(t[0:4])
     t = str(date.today())
-    year = int(t[0:4])
     month = int(t[5:7])
-    all_deposits = Deposit.objects.filter(date__month=month)
-    all_withdraws = Withdraw.objects.filter(date__month=month)
-    p = Deposit.objects.aggregate(Sum("uan"))
-    positive_balance = p["uan__sum"]
-    n = Withdraw.objects.aggregate(Sum("uan"))
-    negative_balance = n["uan__sum"]
+    positive_balance = models.Deposit.objects.aggregate(Sum("uan"))["uan__sum"]
+    negative_balance = models.Withdraw.objects.aggregate(Sum("uan"))[
+        "uan__sum"
+    ]
     total_balance = positive_balance - negative_balance
     balances = {
         "positive_balance": positive_balance,
@@ -22,15 +20,16 @@ def index(request):
         "total_balance": total_balance,
     }
     context = {
-        "all_deposits": all_deposits,
-        "all_withdraws": all_withdraws,
+        "all_deposits": models.Deposit.objects.filter(date__month=month),
+        "all_withdraws": models.Withdraw.objects.filter(date__month=month),
         "balances": balances,
     }
     return render(request, "money/index.html", context)
 
 
 def deposit(request):
-    return render(request, 'money/deposit.html')
+    return render(request, "money/deposit.html")
+
 
 def withdraw(request):
-    return render(request, 'money/withdraw.html')
+    return render(request, "money/withdraw.html")
