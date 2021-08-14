@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("deposit", views.deposit, name="deposit"),
-    path("withdraw", views.withdraw, name="withdraw"),
+    path("deposit/", views.deposit, name="deposit"),
+    path("withdraw/", views.withdraw, name="withdraw"),
 ]
