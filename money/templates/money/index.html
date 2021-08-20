@@ -4,6 +4,16 @@
   <meta charset="utf-8" />
   <title>main page</title>
  </head>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {{ message|safe }}
+                <a href="#" class="close">✖</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
  <body>
   <h2>Расходы за месяц: {{ balances.negative_balance }}</h2>
   <h2>Доходы за месяц: {{ balances.positive_balance }}</h2>
@@ -19,24 +29,25 @@
   <button><img src="images/umbrella.gif"
          style="vertical-align: middle"></button></p>
 
-  <br>
-  <h1>Доходы</h1>
-  {% for item in all_deposits %}
-  <div>
-     <p>{{ item.category }}</p>
-     <p>{{ item.uan }}</p>
-     <p>{{ item.date }}</p>
-  </div>
-  <hr>
-  {% endfor %}
   <h1>Расходы</h1>
   <br>
   {% for item in all_withdraws %}
   <div>
      <p>{{ item.category }}</p>
      <p>{{ item.uan }}</p>
+     <p>{{ item.title }}</p>
      <p>{{ item.date }}</p>
-     <p>
+  </div>
+  <hr>
+  {% endfor %}
+  <br>
+  <h1>Доходы</h1>
+  {% for item in all_deposits %}
+  <div>
+     <p>{{ item.category }}</p>
+     <p>{{ item.uan }}</p>
+     <p>{{ item.title }}</p>
+     <p>{{ item.date }}</p>
   </div>
   <hr>
   {% endfor %}
