@@ -8,44 +8,97 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='DepCategory',
+            name="DepCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='WithCategory',
+            name="WithCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=50)),
             ],
         ),
         migrations.CreateModel(
-            name='Withdraw',
+            name="Withdraw",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=50)),
-                ('uan', models.DecimalField(decimal_places=2, max_digits=7)),
-                ('usd', models.DecimalField(blank=True, decimal_places=2, max_digits=7, null=True)),
-                ('date', models.DateField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='money.withcategory')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=50)),
+                ("uan", models.DecimalField(decimal_places=2, max_digits=7)),
+                (
+                    "usd",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=7, null=True
+                    ),
+                ),
+                ("date", models.DateField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to="money.withcategory",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Deposit',
+            name="Deposit",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=50)),
-                ('uan', models.DecimalField(decimal_places=2, max_digits=7)),
-                ('usd', models.DecimalField(blank=True, decimal_places=2, max_digits=7, null=True)),
-                ('date', models.DateField(auto_now=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='money.depcategory')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=50)),
+                ("uan", models.DecimalField(decimal_places=2, max_digits=7)),
+                (
+                    "usd",
+                    models.DecimalField(
+                        blank=True, decimal_places=2, max_digits=7, null=True
+                    ),
+                ),
+                ("date", models.DateField(auto_now=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to="money.depcategory",
+                    ),
+                ),
             ],
         ),
     ]

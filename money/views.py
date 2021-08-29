@@ -5,7 +5,7 @@ from django.db.models import Sum
 from django.contrib import messages
 
 from . import models
-from .forms import DepositForm, WithdrawForm
+from .forms import DepositForm, WithdrawForm, UserRegisterForm
 
 from datetime import date
 
@@ -23,8 +23,12 @@ def index(request):
         "total_balance": total_balance,
     }
     context = {
-        "all_deposits": models.Deposit.objects.filter(date__month=month).order_by('-date'),
-        "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by('-date'),
+        "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
+            "-date"
+        ),
+        "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by(
+            "-date"
+        ),
         "balances": balances,
     }
     return render(request, "money/index.html", context)
@@ -43,7 +47,7 @@ def deposit(request):
                 title=form.cleaned_data.get("title"),
             )
             update_balance.save()
-            messages.success(request, 'Transaction completed')
+            messages.success(request, "Transaction completed")
             return HttpResponseRedirect(reverse("index"))
     # Если это GET, создать форму по умолчанию.
     else:
@@ -52,7 +56,11 @@ def deposit(request):
 
 
 def withdraw(request):
-    if request.method == 'POST':
+    # форма несвязана c моделью
+    # чем продиктована необходимость
+    # создания переменной 'update_balance'
+    # уместно переписать
+    if request.method == "POST":
         form = WithdrawForm(request.POST)
         if form.is_valid():
             update_balance = models.Withdraw(
@@ -61,9 +69,30 @@ def withdraw(request):
                 title=form.cleaned_data.get("title"),
             )
             update_balance.save()
-            messages.success(request, 'Transaction completed')
+            messages.success(request, "Transaction completed")
             return HttpResponseRedirect(reverse("index"))
+        else:
+            messages.error(request, "Error")
     else:
         form = WithdrawForm()
-    return render(request, "money/withdraw.html", {'form': form})
+    return render(request, "money/withdraw.html", {"form": form})
 
+
+def register(request):
+    # форма связана c моделью
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Registration completed")
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            messages.error(request, "Error")
+    else:
+        form = UserRegisterForm()
+
+    return render(request, "money/register.html", {"form": form})
+
+
+def login(request):
+    return render(request, "money/login.html")
