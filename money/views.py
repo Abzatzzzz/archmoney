@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Sum
 from django.contrib import messages
@@ -45,10 +44,9 @@ def deposit(request):
             )
             update_balance.save()
             messages.success(request, "Transaction completed")
-            return HttpResponseRedirect(reverse("index"))
+            return redirect('money:index')
     # Если это GET, создать форму по умолчанию.
-    else:
-        form = DepositForm()
+    form = DepositForm()
     return render(request, "money/deposit.html", {"form": form})
 
 
@@ -67,11 +65,9 @@ def withdraw(request):
             )
             update_balance.save()
             messages.success(request, "Transaction completed")
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            messages.error(request, "Error")
-    else:
-        form = WithdrawForm()
+            return redirect('money:index')
+        messages.error(request, "Error")
+    form = WithdrawForm()
     return render(request, "money/withdraw.html", {"form": form})
 
 
@@ -82,11 +78,9 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Registration completed")
-            return HttpResponseRedirect(reverse("index"))
-        else:
-            messages.error(request, "Error")
-    else:
-        form = UserRegisterForm()
+            return redirect('money:index')
+        messages.error(request, "Error")
+    form = UserRegisterForm()
 
     return render(request, "money/register.html", {"form": form})
 
