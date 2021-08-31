@@ -17,11 +17,6 @@ def index(request):
     positive_balance = models.Deposit.objects.aggregate(Sum("uan"))["uan__sum"]
     negative_balance = models.Withdraw.objects.aggregate(Sum("uan"))["uan__sum"]
     total_balance = positive_balance - negative_balance
-    balances = {
-        "positive_balance": positive_balance,
-        "negative_balance": negative_balance,
-        "total_balance": total_balance,
-    }
     context = {
         "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
             "-date"
@@ -29,7 +24,9 @@ def index(request):
         "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by(
             "-date"
         ),
-        "balances": balances,
+        "positive_balance": positive_balance,
+        "negative_balance": negative_balance,
+        "total_balance": total_balance,
     }
     return render(request, "money/index.html", context)
 
