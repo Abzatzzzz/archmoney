@@ -1,21 +1,22 @@
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.db.models import Sum
 from django.contrib import messages
 
 from . import models
-from .forms import DepositForm, WithdrawForm, UserRegisterForm
+from .forms import DepositForm, WithdrawForm, UserRegisterForm, UserLoginForm
 
 from datetime import date
 
-
+@login_required(login_url='login/')
 def index(request):
     # year = int(t[0:4])
     t = str(date.today())
     month = int(t[5:7])
-    positive_balance = models.Deposit.objects.aggregate(Sum("uan"))["uan__sum"]
-    negative_balance = models.Withdraw.objects.aggregate(Sum("uan"))["uan__sum"]
-    total_balance = positive_balance - negative_balance
+    positive_balance = models.Deposit.objects.filter(date__month=month).aggregate(Sum("uan"))["uan__sum"]
+    negative_balance = models.Withdraw.objects.filter(date__month=month).aggregate(Sum("uan"))["uan__sum"]
     context = {
         "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
             "-date"
@@ -25,7 +26,7 @@ def index(request):
         ),
         "positive_balance": positive_balance,
         "negative_balance": negative_balance,
-        "total_balance": total_balance,
+        "total_balance": positive_balance - negative_balance
     }
     return render(request, "money/index.html", context)
 
@@ -74,9 +75,10 @@ def withdraw(request):
 def register(request):
     # форма связана c моделью
     if request.method == "POST":
-        form = UserRegisterForm(request.POST)
+        form = UserRegisterForm(request.POST) # работает без 'data' 
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
             messages.success(request, "Registration completed")
             return redirect('money:index')
         messages.error(request, "Error")
@@ -85,5 +87,18 @@ def register(request):
     return render(request, "money/register.html", {"form": form})
 
 
-def login(request):
-    return render(request, "money/login.html")
+def user_login(request):
+    if request.method == "POST":
+        form = UserLoginForm(data=request.POST) # !data
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('money:index')
+        messages.error(request, "Error")
+    form = UserLoginForm()
+    return render(request, "money/login.html", {"form": form})
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('money:index')

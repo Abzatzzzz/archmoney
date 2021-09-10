@@ -1,8 +1,15 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from .models import DepCategory, WithCategory
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label="User name")
+    password = forms.CharField(
+        label="Password")
 
 
 class UserRegisterForm(UserCreationForm):

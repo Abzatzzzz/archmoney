@@ -3,8 +3,13 @@
 <html>
  <head>
   <meta charset="utf-8" />
-    <a href="{% url "index"%}">Home</a> | <a href="{% url 'register' %}">Register</a> | <a href="{% url 'login' %}">login</a>
+  <a href="{% url 'money:index' %}">Home</a> |  
   <title>{% block title %} main page {% endblock %}</title>
+  {% if request.user.is_authenticated %}
+     {{ user.username }} <a href="{% url 'money:logout' %}">  Logout </a>     
+  {% else %}
+     <a href="{% url 'money:register' %}">Register</a> | <a href="{% url 'money:login' %}">Login</a>
+  {% endif %}
  </head>
 {% endblock %}
 
