@@ -12,8 +12,14 @@ urlpatterns = [
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path("withdraw/", views.withdraw, name="withdraw"),
-    path("create_dep_category/", views.DepCategoryCreateView.as_view(), name="create_dep_category"),
     path(
-        "create_with_category/", views.create_with_category, name="create_with_category"
+        "create_dep_category/",
+        views.DepCategoryCreateView.as_view(),
+        name="create_dep_category",
+    ),
+    path(
+        "create_with_category/",
+        views.create_with_category,
+        name="create_with_category",
     ),
 ]

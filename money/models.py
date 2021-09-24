@@ -10,7 +10,9 @@ class Deposit(models.Model):
         on_delete=models.DO_NOTHING,
     )
     uan = models.DecimalField(max_digits=7, decimal_places=2)
-    usd = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    usd = models.DecimalField(
+        max_digits=7, decimal_places=2, blank=True, null=True
+    )
     date = models.DateField(auto_now=True)
 
     def __str__(self):
@@ -25,7 +27,9 @@ class Withdraw(models.Model):
         on_delete=models.DO_NOTHING,
     )
     uan = models.DecimalField(max_digits=7, decimal_places=2)
-    usd = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True)
+    usd = models.DecimalField(
+        max_digits=7, decimal_places=2, blank=True, null=True
+    )
     date = models.DateField(auto_now=True)
 
     def __str__(self):

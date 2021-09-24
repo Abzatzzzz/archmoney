@@ -23,7 +23,8 @@ class UserRegisterForm(UserCreationForm):
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     password1 = forms.CharField(
-        label="Password", widget=forms.PasswordInput(attrs={"class": "form-control"})
+        label="Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
     email = forms.EmailField()
 
@@ -34,11 +35,15 @@ class UserRegisterForm(UserCreationForm):
 
 class DepositForm(forms.Form):
     uan = forms.DecimalField(label="UAN", required=True)
-    categories = forms.ModelMultipleChoiceField(queryset=DepCategory.objects.all())
+    categories = forms.ModelMultipleChoiceField(
+        queryset=DepCategory.objects.all()
+    )
     title = forms.CharField(required=False, max_length=50)
 
 
 class WithdrawForm(forms.Form):
     uan = forms.DecimalField(label="UAN", required=True)
-    categories = forms.ModelMultipleChoiceField(queryset=WithCategory.objects.all())
+    categories = forms.ModelMultipleChoiceField(
+        queryset=WithCategory.objects.all()
+    )
     title = forms.CharField(required=False, max_length=50)

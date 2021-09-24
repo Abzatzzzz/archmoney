@@ -24,19 +24,19 @@ def index(request):
     # year = int(t[0:4])
     t = str(date.today())
     month = int(t[5:7])
-    positive_balance = models.Deposit.objects.filter(date__month=month).aggregate(
-        Sum("uan")
-    )["uan__sum"]
-    negative_balance = models.Withdraw.objects.filter(date__month=month).aggregate(
-        Sum("uan")
-    )["uan__sum"]
+    positive_balance = models.Deposit.objects.filter(
+        date__month=month
+    ).aggregate(Sum("uan"))["uan__sum"]
+    negative_balance = models.Withdraw.objects.filter(
+        date__month=month
+    ).aggregate(Sum("uan"))["uan__sum"]
     context = {
-        "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
-            "-date"
-        ),
-        "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by(
-            "-date"
-        ),
+        "all_deposits": models.Deposit.objects.filter(
+            date__month=month
+        ).order_by("-date"),
+        "all_withdraws": models.Withdraw.objects.filter(
+            date__month=month
+        ).order_by("-date"),
         "positive_balance": positive_balance,
         "negative_balance": negative_balance,
     }
@@ -47,8 +47,8 @@ def index(request):
     return render(request, "money/index.html", context)
 
 
-#@login_required(login_url="login/")
-#def create_dep_category(request):
+# @login_required(login_url="login/")
+# def create_dep_category(request):
 #    if request.method == "POST":
 #        form = DepCategoryForm(request.POST)
 #        if form.is_valid():
@@ -59,12 +59,13 @@ def index(request):
 #    context = {"form": form, "categories": models.DepCategory.objects.all()}
 #    return render(request, "money/create_dep_category.html", context)
 class DepCategoryCreateView(CreateView):
-    template_name = 'money/create_dep_category.html'
+    template_name = "money/create_dep_category.html"
     form_class = DepCategoryCreateForm
+
     def form_valid(self, form):
         service = services.DepCategoryModelService(self.request)
         service.create(form.cleaned_data)
-        return redirect('money:index')
+        return redirect("money:index")
 
 
 @login_required(login_url="login/")
