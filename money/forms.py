@@ -5,11 +5,15 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
 
+class DepCategoryCreateForm(forms.ModelForm):
+    class Meta:
+        model = DepCategory
+        fields = ["title"]
+
+
 class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(
-        label="User name")
-    password = forms.CharField(
-        label="Password")
+    username = forms.CharField(label="User name")
+    password = forms.CharField(label="Password")
 
 
 class UserRegisterForm(UserCreationForm):

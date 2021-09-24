@@ -1,7 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
 class Deposit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=True)
     category = models.ForeignKey(
         "DepCategory",
@@ -16,6 +18,7 @@ class Deposit(models.Model):
 
 
 class Withdraw(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=True)
     category = models.ForeignKey(
         "WithCategory",
@@ -30,6 +33,7 @@ class Withdraw(models.Model):
 
 
 class DepCategory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
 
     def __str__(self):
@@ -37,6 +41,7 @@ class DepCategory(models.Model):
 
 
 class WithCategory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
 
     def __str__(self):
