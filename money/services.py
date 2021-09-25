@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from django.http import HttpRequest
 from . import models
@@ -9,7 +9,7 @@ class DepCategoryModelService:
         self._request = request
 
 
-    def create(self, data: dict[str, Any]) -> None:
+    def create(self, data: Dict[str, Any]) -> None:
         models.DepCategory.objects.create(
             user=self._request.user, title=data["title"]
         )
