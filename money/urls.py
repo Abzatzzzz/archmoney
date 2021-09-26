@@ -22,4 +22,9 @@ urlpatterns = [
         views.create_with_category,
         name="create_with_category",
     ),
+    path(
+        "depcategories/",
+        views.DepCategoryListView.as_view(),
+        name="depcategories",
+    ),
 ]

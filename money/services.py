@@ -13,3 +13,14 @@ class DepCategoryModelService:
         models.DepCategory.objects.create(
             user=self._request.user, title=data["title"]
         )
+
+
+class WithCategoryModelService:
+    def __init__(self, request: HttpRequest) -> None:
+        self._request = request
+
+
+    def create(self, data: Dict[str, Any]) -> None:
+        models.DepCategory.objects.create(
+            user=self._request.user, title=data["title"]
+        )
