@@ -6,6 +6,8 @@
   <a href="{% url 'money:index' %}">Home</a> |  
   <title>{% block title %} main page {% endblock %}</title>
   {% if request.user.is_authenticated %}
+     <a href="{% url 'money:create_dep_category'%}">Deposit Category</a>
+     <a href="{% url 'money:create_with_category'%}">Withdraw Category</a>
      {{ user.username }} <a href="{% url 'money:logout' %}">  Logout </a>     
   {% else %}
      <a href="{% url 'money:register' %}">Register</a> | <a href="{% url 'money:login' %}">Login</a>
