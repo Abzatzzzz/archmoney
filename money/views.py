@@ -89,19 +89,6 @@ class WithCategoryCreateView(CreateView):
         return redirect("money:withcategories")
 
 
-#@login_required(login_url="login/")
-#def create_with_category(request):
-#    if request.method == "POST":
-#        form = DepCategoryForm(request.POST)
-#        if form.is_valid():
-#            form.save()
-#            messages.success(request, "Category added !")
-#            return redirect("money:create_with_category")
-#    form = DepCategoryForm()
-#    context = {"form": form, "categories": models.WithCategory.objects.all()}
-#    return render(request, "money/create_with_category.html", context)
-
-
 def deposit(request):
     if request.method == "POST":
         # Создаём экземпляр формы и заполняем данными из запроса:
@@ -135,6 +122,7 @@ def withdraw(request):
                 uan=form.cleaned_data.get("uan"),
                 category=form.cleaned_data.get("categories")[0],
                 title=form.cleaned_data.get("title"),
+                user=request.user
             )
             update_balance.save()
             messages.success(request, "Transaction completed")
