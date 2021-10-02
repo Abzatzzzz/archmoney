@@ -60,6 +60,15 @@ class DepCategoryListView(LoginRequiredMixin, ListView):
         return rep.get_user_depcategories()
 
 
+class WithCategoryListView(LoginRequiredMixin, ListView):
+    template_name="money/list_with_categories.html"
+    context_object_name = "categories"
+    login_url="/login/"
+
+    def get_queryset(self):
+        rep = repositories.WithCategoryModelRepository(self.request)
+        return rep.get_user_withcategories()
+
 class DepCategoryCreateView(CreateView):
     template_name = "money/create_dep_category.html"
     form_class = DepCategoryCreateForm
@@ -77,20 +86,20 @@ class WithCategoryCreateView(CreateView):
     def form_valid(self, form):
         service = services.WithCategoryModelService(self.request)
         service.create(form.cleaned_data)
-        return redirect("money:list_with_categories")
+        return redirect("money:withcategories")
 
 
-@login_required(login_url="login/")
-def create_with_category(request):
-    if request.method == "POST":
-        form = DepCategoryForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Category added !")
-            return redirect("money:create_with_category")
-    form = DepCategoryForm()
-    context = {"form": form, "categories": models.WithCategory.objects.all()}
-    return render(request, "money/create_with_category.html", context)
+#@login_required(login_url="login/")
+#def create_with_category(request):
+#    if request.method == "POST":
+#        form = DepCategoryForm(request.POST)
+#        if form.is_valid():
+#            form.save()
+#            messages.success(request, "Category added !")
+#            return redirect("money:create_with_category")
+#    form = DepCategoryForm()
+#    context = {"form": form, "categories": models.WithCategory.objects.all()}
+#    return render(request, "money/create_with_category.html", context)
 
 
 def deposit(request):

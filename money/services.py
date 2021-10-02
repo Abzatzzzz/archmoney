@@ -21,6 +21,6 @@ class WithCategoryModelService:
 
 
     def create(self, data: Dict[str, Any]) -> None:
-        models.DepCategory.objects.create(
+        models.WithCategory.objects.create(
             user=self._request.user, title=data["title"]
         )

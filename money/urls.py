@@ -19,12 +19,16 @@ urlpatterns = [
     ),
     path(
         "create_with_category/",
-        views.create_with_category,
+        views.WithCategoryCreateView.as_view(),
         name="create_with_category",
     ),
     path(
         "depcategories/",
         views.DepCategoryListView.as_view(),
         name="depcategories",
+    ),
+    path("withcategories/",
+        views.WithCategoryListView.as_view(),
+        name="withcategories",
     ),
 ]
