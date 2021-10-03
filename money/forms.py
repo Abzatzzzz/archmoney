@@ -1,7 +1,5 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from .models import DepCategory, WithCategory
-from django.contrib.auth.models import User
+from .models import DepCategory, WithCategory, Deposit
 
 
 class DepCategoryCreateForm(forms.ModelForm):
@@ -16,17 +14,13 @@ class WithCategoryCreateForm(forms.ModelForm):
         fields = ["title"]
 
 
-class DepositForm(forms.Form):
-    uan = forms.DecimalField(label="UAN", required=True)
-    categories = forms.ModelMultipleChoiceField(
-        queryset=DepCategory.objects.all()
-    )
-    title = forms.CharField(required=False, max_length=50)
+class DepositCreateForm(forms.ModelForm):
+    class Meta:
+        model = Deposit
+        fields = ["uan", "category", "title"]
 
 
 class WithdrawForm(forms.Form):
     uan = forms.DecimalField(label="UAN", required=True)
-    categories = forms.ModelMultipleChoiceField(
-        queryset=WithCategory.objects.all()
-    )
+    categories = forms.ModelMultipleChoiceField(queryset=WithCategory.objects.all())
     title = forms.CharField(required=False, max_length=50)

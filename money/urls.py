@@ -7,7 +7,7 @@ app_name = "money"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("deposit/", views.deposit, name="deposit"),
+    path("deposit/", views.DepositCreateView.as_view(), name="deposit"),
     path("register/", views.register, name="register"),
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
@@ -22,13 +22,8 @@ urlpatterns = [
         views.WithCategoryCreateView.as_view(),
         name="create_with_category",
     ),
+    path("depcategories/", views.DepCategoryListView.as_view(), name="depcategories"),
     path(
-        "depcategories/",
-        views.DepCategoryListView.as_view(),
-        name="depcategories",
-    ),
-    path("withcategories/",
-        views.WithCategoryListView.as_view(),
-        name="withcategories",
+        "withcategories/", views.WithCategoryListView.as_view(), name="withcategories"
     ),
 ]

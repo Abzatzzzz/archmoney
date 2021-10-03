@@ -5,29 +5,19 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ("money", "0001_initial"),
-    ]
+    dependencies = [("money", "0001_initial")]
 
     operations = [
         migrations.RenameField(
-            model_name="depcategory",
-            old_name="username",
-            new_name="user",
+            model_name="depcategory", old_name="username", new_name="user"
         ),
         migrations.RenameField(
-            model_name="deposit",
-            old_name="username",
-            new_name="user",
+            model_name="deposit", old_name="username", new_name="user"
         ),
         migrations.RenameField(
-            model_name="withcategory",
-            old_name="username",
-            new_name="user",
+            model_name="withcategory", old_name="username", new_name="user"
         ),
         migrations.RenameField(
-            model_name="withdraw",
-            old_name="username",
-            new_name="user",
+            model_name="withdraw", old_name="username", new_name="user"
         ),
     ]

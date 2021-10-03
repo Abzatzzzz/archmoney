@@ -13,41 +13,13 @@ from . import services
 from . import repositories
 from . import models
 from .forms import (
-    DepositForm,
+    DepositCreateForm,
     WithdrawForm,
     DepCategoryCreateForm,
     WithCategoryCreateForm,
 )
 
 from datetime import date
-
-
-@login_required(login_url="login/")
-def index(request):
-    # year = int(t[0:4])
-    t = str(date.today())
-    month = int(t[5:7])
-    positive_balance = models.Deposit.objects.filter(
-        date__month=month
-    ).aggregate(Sum("uan"))["uan__sum"]
-    negative_balance = models.Withdraw.objects.filter(
-        date__month=month
-    ).aggregate(Sum("uan"))["uan__sum"]
-    context = {
-        "all_deposits": models.Deposit.objects.filter(
-            date__month=month
-        ).order_by("-date"),
-        "all_withdraws": models.Withdraw.objects.filter(
-            date__month=month
-        ).order_by("-date"),
-        "positive_balance": positive_balance,
-        "negative_balance": negative_balance,
-    }
-    if positive_balance and negative_balance:
-        context["total_balance"] = positive_balance - negative_balance
-    else:
-        context["total_balance"] = "0"
-    return render(request, "money/index.html", context)
 
 
 class DepCategoryListView(LoginRequiredMixin, ListView):
@@ -61,13 +33,14 @@ class DepCategoryListView(LoginRequiredMixin, ListView):
 
 
 class WithCategoryListView(LoginRequiredMixin, ListView):
-    template_name="money/list_with_categories.html"
+    template_name = "money/list_with_categories.html"
     context_object_name = "categories"
-    login_url="/login/"
+    login_url = "/login/"
 
     def get_queryset(self):
         rep = repositories.WithCategoryModelRepository(self.request)
         return rep.get_user_withcategories()
+
 
 class DepCategoryCreateView(CreateView):
     template_name = "money/create_dep_category.html"
@@ -89,49 +62,71 @@ class WithCategoryCreateView(CreateView):
         return redirect("money:withcategories")
 
 
-def deposit(request):
-    if request.method == "POST":
-        # Создаём экземпляр формы и заполняем данными из запроса:
-        form = DepositForm(request.POST)
-        # Проверка валидности данных формы:
-        if form.is_valid():
-            # Добавляем запись в базу
-            update_balance = models.Deposit(
-                uan=form.cleaned_data.get("uan"),
-                category=form.cleaned_data.get("categories")[0],
-                title=form.cleaned_data.get("title"),
-                user=request.user
-            )
-            update_balance.save()
-            messages.success(request, "Transaction completed")
-            return redirect("money:index")
-    # Если это GET, создать форму по умолчанию.
-    form = DepositForm()
-    return render(request, "money/deposit.html", {"form": form})
+class DepositCreateView(CreateView):
+    template_name = "money/deposit.html"
+    form_class = DepositCreateForm
+
+    def form_valid(self, form):
+        service = services.DepositModelService(self.request)
+        service.create(form.cleaned_data)
+        return redirect("money:index")
 
 
 def withdraw(request):
-    # форма несвязана c моделью
-    # чем продиктована необходимость
-    # создания переменной 'update_balance'
-    # уместно переписать
+    """
+    форма не связана c моделью
+    чем продиктована необходимость
+    создания переменной 'update_balance'
+    уместно переписать
+
+    """
     if request.method == "POST":
+        # Создаём экземпляр формы и заполняем данными из запроса:
         form = WithdrawForm(request.POST)
+        # Проверка валидности данных формы:
         if form.is_valid():
+            # Добавляем запись в базу
             update_balance = models.Withdraw(
                 uan=form.cleaned_data.get("uan"),
                 category=form.cleaned_data.get("categories")[0],
                 title=form.cleaned_data.get("title"),
-                user=request.user
+                user=request.user,
             )
             update_balance.save()
             messages.success(request, "Transaction completed")
             return redirect("money:index")
         messages.error(request, "Error")
+    # Если это GET, создать форму по умолчанию.
     form = WithdrawForm()
     return render(request, "money/withdraw.html", {"form": form})
 
 
+@login_required(login_url="login/")
+def index(request):
+    # year = int(t[0:4])
+    t = str(date.today())
+    month = int(t[5:7])
+    positive_balance = models.Deposit.objects.filter(date__month=month).aggregate(
+        Sum("uan")
+    )["uan__sum"]
+    negative_balance = models.Withdraw.objects.filter(date__month=month).aggregate(
+        Sum("uan")
+    )["uan__sum"]
+    context = {
+        "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
+            "-date"
+        ),
+        "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by(
+            "-date"
+        ),
+        "positive_balance": positive_balance,
+        "negative_balance": negative_balance,
+    }
+    if positive_balance and negative_balance:
+        context["total_balance"] = positive_balance - negative_balance
+    else:
+        context["total_balance"] = "0"
+    return render(request, "money/index.html", context)
 
 
 def register(request):
