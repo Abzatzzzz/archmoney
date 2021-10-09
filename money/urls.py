@@ -1,6 +1,9 @@
 from django.urls import path
+from django.views.generic.dates import ArchiveIndexView
 
 from . import views
+from . models import Deposit
+
 
 
 app_name = "money"
@@ -26,4 +29,5 @@ urlpatterns = [
     path(
         "withcategories/", views.WithCategoryListView.as_view(), name="withcategories"
     ),
+   # path("show_details/", views.detail, name="details" ),
 ]

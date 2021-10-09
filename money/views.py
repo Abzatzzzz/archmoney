@@ -22,6 +22,14 @@ from .forms import (
 from datetime import date
 
 
+#class DetailListView(LoginRequiredMixin, ListView):
+#    template_name = "money/show_details.html"
+#    context_object_name = "days"
+#    login_url = "/login/"
+#    
+#    def get_queryset(self):
+#        re
+
 class DepCategoryListView(LoginRequiredMixin, ListView):
     template_name = "money/list_dep_categories.html"
     context_object_name = "categories"
@@ -159,3 +167,7 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect("money:index")
+
+
+#def detail(request):
+#    return render(request, "money/show_details.html")
