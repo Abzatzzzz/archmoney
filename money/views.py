@@ -114,17 +114,17 @@ def index(request):
     # year = int(t[0:4])
     t = str(date.today())
     month = int(t[5:7])
-    positive_balance = models.Deposit.objects.filter(date__month=month).aggregate(
+    positive_balance = models.Deposit.objects.filter(user=request.user).filter(date__month=month).aggregate(
         Sum("uan")
     )["uan__sum"]
-    negative_balance = models.Withdraw.objects.filter(date__month=month).aggregate(
+    negative_balance = models.Withdraw.objects.filter(user=request.user).filter(date__month=month).aggregate(
         Sum("uan")
     )["uan__sum"]
     context = {
-        "all_deposits": models.Deposit.objects.filter(date__month=month).order_by(
+        "all_deposits": models.Deposit.objects.filter(date__month=month).filter(user=request.user).order_by(
             "-date"
         ),
-        "all_withdraws": models.Withdraw.objects.filter(date__month=month).order_by(
+        "all_withdraws": models.Withdraw.objects.filter(date__month=month).filter(user=request.user).order_by(
             "-date"
         ),
         "positive_balance": positive_balance,
