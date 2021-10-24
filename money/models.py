@@ -13,6 +13,9 @@ class Deposit(models.Model):
     def __str__(self):
         return self.category.title
 
+    class Meta:
+        ordering = ['-id']
+
 
 class Withdraw(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,5 +1,6 @@
 from django import forms
-from .models import DepCategory, WithCategory, Deposit
+from .models import DepCategory, WithCategory, Deposit, Withdraw
+
 
 
 class DepCategoryCreateForm(forms.ModelForm):
@@ -15,19 +16,25 @@ class WithCategoryCreateForm(forms.ModelForm):
 
 
 class DepositCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs) # Расширение базового класса
+        self.fields["category"].queryset = DepCategory.objects.filter(user=user)
+
+
     class Meta:
         model = Deposit
         fields = ["uan", "category", "title"]
 
 
-class WithdrawForm(forms.Form):
-    uan = forms.DecimalField(label="UAN", required=True)
-    categories = forms.ModelMultipleChoiceField(queryset=WithCategory.objects.all())
-    title = forms.CharField(required=False, max_length=50)
+class WithdrawCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs) # Расширение базового класса
+        self.fields["category"].queryset = WithCategory.objects.filter(user=user)
 
 
-#class DateForm(forms.Form):
-#    OPTIONS = (("day": "today"),("week": "week"), ("month": "month"), 
-#            ("year": "year"), ("all_time": "archive/"),
-#            )
-#    time_period = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=OPTIONS)
+    class Meta:
+        model = Withdraw
+        fields = ["uan", "category", "title"]
+

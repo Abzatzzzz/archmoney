@@ -17,6 +17,19 @@ class DepositModelService:
         )
 
 
+class WithdrawModelService:
+    def __init__(self, request):
+        self._request = request
+
+    def create(self, data):
+        models.Withdraw.objects.create(
+            user=self._request.user,
+            title=data["title"],
+            uan=data["uan"],
+            category=data["category"],
+        )
+
+
 class DepCategoryModelService:
     def __init__(self, request: HttpRequest) -> None:
         self._request = request

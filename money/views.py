@@ -14,7 +14,7 @@ from . import repositories
 from . import models
 from .forms import (
     DepositCreateForm,
-    WithdrawForm,
+    WithdrawCreateForm,
     DepCategoryCreateForm,
     WithCategoryCreateForm,
 )
@@ -22,13 +22,6 @@ from .forms import (
 from datetime import date
 
 
-#class DetailListView(LoginRequiredMixin, ListView):
-#    template_name = "money/show_details.html"
-#    context_object_name = "days"
-#    login_url = "/login/"
-#    
-#    def get_queryset(self):
-#        re
 
 class DepCategoryListView(LoginRequiredMixin, ListView):
     template_name = "money/list_dep_categories.html"
@@ -72,7 +65,12 @@ class WithCategoryCreateView(CreateView):
 
 class DepositCreateView(CreateView):
     template_name = "money/deposit.html"
-    form_class = DepositCreateForm
+
+    def get_form(self, form_class=None):
+        if self.request.method == "POST":
+            data = self.request.POST
+            return DepositCreateForm(user=self.request.user, data=data)
+        return DepositCreateForm(user=self.request.user)
 
     def form_valid(self, form):
         service = services.DepositModelService(self.request)
@@ -80,33 +78,19 @@ class DepositCreateView(CreateView):
         return redirect("money:index")
 
 
-def withdraw(request):
-    """
-    форма не связана c моделью
-    чем продиктована необходимость
-    создания переменной 'update_balance'
-    уместно переписать
+class WithdrawCreateView(CreateView):
+    template_name = "money/withdraw.html"
 
-    """
-    if request.method == "POST":
-        # Создаём экземпляр формы и заполняем данными из запроса:
-        form = WithdrawForm(request.POST)
-        # Проверка валидности данных формы:
-        if form.is_valid():
-            # Добавляем запись в базу
-            update_balance = models.Withdraw(
-                uan=form.cleaned_data.get("uan"),
-                category=form.cleaned_data.get("categories")[0],
-                title=form.cleaned_data.get("title"),
-                user=request.user,
-            )
-            update_balance.save()
-            messages.success(request, "Transaction completed")
-            return redirect("money:index")
-        messages.error(request, "Error")
-    # Если это GET, создать форму по умолчанию.
-    form = WithdrawForm()
-    return render(request, "money/withdraw.html", {"form": form})
+    def get_form(self, form_class=None):
+        if self.request.method == "POST":
+            data = self.request.POST
+            return WithdrawCreateForm(user=self.request.user, data=data)
+        return WithdrawCreateForm(user=self.request.user)
+
+    def form_valid(self, form):
+        service = services.WithdrawModelService(self.request)
+        service.create(form.cleaned_data)
+        return redirect("money:index")
 
 
 @login_required(login_url="login/")

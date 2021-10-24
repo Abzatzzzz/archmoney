@@ -14,7 +14,7 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
-    path("withdraw/", views.withdraw, name="withdraw"),
+    path("withdraw/", views.WithdrawCreateView.as_view(), name="withdraw"),
     path(
         "create_dep_category/",
         views.DepCategoryCreateView.as_view(),
