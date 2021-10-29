@@ -1,4 +1,15 @@
-from .models import DepCategory, WithCategory
+from .models import DepCategory, WithCategory, Deposit
+
+
+class AllDepModelRepository:
+    def __init__(self, request):
+        self._request = request
+
+    def get_user_all_deposits(self):
+        user = self._request.user
+        empty_queryset = Deposit.objects.none()
+        return Deposit.objects.filter(user=user) if user.is_authenticated else empty_queryset
+
 
 
 class DepCategoryModelRepository:

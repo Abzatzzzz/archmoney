@@ -29,5 +29,6 @@ urlpatterns = [
     path(
         "withcategories/", views.WithCategoryListView.as_view(), name="withcategories"
     ),
-   # path("show_details/", views.detail, name="details" ),
+    path("show_details/", views.detail, name="details" ),
+    path("deposit_archive/", views.deposit_archive, name="deposit_archive"),
 ]

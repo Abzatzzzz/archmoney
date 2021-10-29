@@ -153,5 +153,13 @@ def user_logout(request):
     return redirect("money:index")
 
 
-#def detail(request):
-#    return render(request, "money/show_details.html")
+def detail(request):
+    return render(request, "money/show_details.html")
+
+
+def deposit_archive(request):
+    total_uan = models.Deposit.objects.filter(user=request.user).aggregate(
+        Sum("uan")
+    )["uan__sum"]
+    all_deposits = models.Deposit.objects.filter(user=request.user)
+    return render(request, "money/deposit_archive.html", context = {'total_uan': total_uan, 'all_deposits': all_deposits})
