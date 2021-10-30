@@ -7,5 +7,9 @@
     <h1>Choose Category and Period of time for Report</h1>
     
     <h3><a href="{% url 'money:deposit_archive'%}">All time deposits</a></h3>
+    <h3><a href="{% url 'money:withdraw_archive'%}">All time withdraws</a></h3>
+    <hr>
+    <h3><a href="{% url 'money:deposit_week'%}">Last week deposits</a></h3>
+    <h3><a href="{% url 'money:withdraw_week'%}">Last week withdraws</a></h3>
 
 {%  endblock %}

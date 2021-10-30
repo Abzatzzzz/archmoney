@@ -31,4 +31,7 @@ urlpatterns = [
     ),
     path("show_details/", views.detail, name="details" ),
     path("deposit_archive/", views.deposit_archive, name="deposit_archive"),
+    path("withdraw_archive/", views.withdraw_archive, name="withdraw_archive"),
+    path("last_week_deposit/", views.dep_week, name="deposit_week"),
+    path("last_week_withdraw/", views.withdraw_week, name="withdraw_week"),
 ]

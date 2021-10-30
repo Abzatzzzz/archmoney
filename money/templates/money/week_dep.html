@@ -1,0 +1,24 @@
+
+{% extends "money/index.html"%}
+
+{% block title %} Last week Deposits {% endblock %}
+
+{% block content %}
+  
+<h1>Total :{{ total_uan }}</h1>
+	    {% for uan in latest.uan %}
+		<li>{{ deposit.date }}</li>
+		<hr>
+	    {% endfor %}
+    <h1>All Deposits:</h1>
+    <ul> 
+	    {% for deposit in all_deposits %}
+		<li>{{ deposit.uan }}</li>
+		<li>{{ deposit.title }}</li>
+		<li>{{ deposit.category }}</li>
+		<li>{{ deposit.date }}</li>
+		<hr>
+	    {% endfor %}
+    </ul>
+	
+{%  endblock %}

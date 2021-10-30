@@ -19,8 +19,8 @@ from .forms import (
     WithCategoryCreateForm,
 )
 
-from datetime import date
-
+from datetime import date, timedelta
+from django.utils import timezone
 
 
 class DepCategoryListView(LoginRequiredMixin, ListView):
@@ -163,3 +163,27 @@ def deposit_archive(request):
     )["uan__sum"]
     all_deposits = models.Deposit.objects.filter(user=request.user)
     return render(request, "money/deposit_archive.html", context = {'total_uan': total_uan, 'all_deposits': all_deposits})
+
+
+def withdraw_archive(request):
+    total_uan = models.Withdraw.objects.filter(user=request.user).aggregate(
+        Sum("uan")
+    )["uan__sum"]
+    all_withdraws = models.Withdraw.objects.filter(user=request.user)
+    return render(request, "money/withdraw_archive.html", context = {'total_uan': total_uan, 'all_withdraws': all_withdraws})
+
+
+def dep_week(request):
+    some_day_last_week = timezone.now().date() - timedelta(days=7)
+    tomorrow = timezone.now().date() + timedelta(days=1)
+    all_deposits = models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user)
+    total_uan = models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user).aggregate(Sum("uan"))["uan__sum"]
+    return render(request, "money/week_dep.html", context = {'total_uan': total_uan, 'all_deposits': all_deposits})
+
+
+def withdraw_week(request):
+    some_day_last_week = timezone.now().date() - timedelta(days=7)
+    tomorrow = timezone.now().date() + timedelta(days=1)
+    all_withdraws = models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user)
+    total_uan = models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user).aggregate(Sum("uan"))["uan__sum"]
+    return render(request, "money/week_with.html",context = {'total_uan': total_uan, 'all_withdraws': all_withdraws} )
