@@ -2,6 +2,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.urls import reverse
 from django.db.models import Sum
 from django.contrib import messages
@@ -20,7 +21,6 @@ from .forms import (
 )
 
 from datetime import date, timedelta
-from django.utils import timezone
 
 
 class DepCategoryListView(LoginRequiredMixin, ListView):
@@ -98,19 +98,23 @@ def index(request):
     # year = int(t[0:4])
     t = str(date.today())
     month = int(t[5:7])
-    positive_balance = models.Deposit.objects.filter(user=request.user).filter(date__month=month).aggregate(
-        Sum("uan")
-    )["uan__sum"]
-    negative_balance = models.Withdraw.objects.filter(user=request.user).filter(date__month=month).aggregate(
-        Sum("uan")
-    )["uan__sum"]
+    positive_balance = (
+        models.Deposit.objects.filter(user=request.user)
+        .filter(date__month=month)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    negative_balance = (
+        models.Withdraw.objects.filter(user=request.user)
+        .filter(date__month=month)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
     context = {
-        "all_deposits": models.Deposit.objects.filter(date__month=month).filter(user=request.user).order_by(
-            "-date"
-        ),
-        "all_withdraws": models.Withdraw.objects.filter(date__month=month).filter(user=request.user).order_by(
-            "-date"
-        ),
+        "all_deposits": models.Deposit.objects.filter(date__month=month)
+        .filter(user=request.user)
+        .order_by("-date"),
+        "all_withdraws": models.Withdraw.objects.filter(date__month=month)
+        .filter(user=request.user)
+        .order_by("-date"),
         "positive_balance": positive_balance,
         "negative_balance": negative_balance,
     }
@@ -158,32 +162,96 @@ def detail(request):
 
 
 def deposit_archive(request):
-    total_uan = models.Deposit.objects.filter(user=request.user).aggregate(
-        Sum("uan")
-    )["uan__sum"]
+    total_uan = models.Deposit.objects.filter(user=request.user).aggregate(Sum("uan"))[
+        "uan__sum"
+    ]
     all_deposits = models.Deposit.objects.filter(user=request.user)
-    return render(request, "money/deposit_archive.html", context = {'total_uan': total_uan, 'all_deposits': all_deposits})
+    return render(
+        request,
+        "money/deposit_archive.html",
+        context={"total_uan": total_uan, "all_deposits": all_deposits},
+    )
 
 
 def withdraw_archive(request):
-    total_uan = models.Withdraw.objects.filter(user=request.user).aggregate(
-        Sum("uan")
-    )["uan__sum"]
+    total_uan = models.Withdraw.objects.filter(user=request.user).aggregate(Sum("uan"))[
+        "uan__sum"
+    ]
     all_withdraws = models.Withdraw.objects.filter(user=request.user)
-    return render(request, "money/withdraw_archive.html", context = {'total_uan': total_uan, 'all_withdraws': all_withdraws})
+    return render(
+        request,
+        "money/withdraw_archive.html",
+        context={"total_uan": total_uan, "all_withdraws": all_withdraws},
+    )
 
 
 def dep_week(request):
     some_day_last_week = timezone.now().date() - timedelta(days=7)
     tomorrow = timezone.now().date() + timedelta(days=1)
-    all_deposits = models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user)
-    total_uan = models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user).aggregate(Sum("uan"))["uan__sum"]
-    return render(request, "money/week_dep.html", context = {'total_uan': total_uan, 'all_deposits': all_deposits})
+    all_deposits = models.Deposit.objects.filter(
+        date__gte=some_day_last_week, date__lt=tomorrow
+    ).filter(user=request.user)
+    total_uan = (
+        models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/week_dep.html",
+        context={"total_uan": total_uan, "all_deposits": all_deposits},
+    )
 
 
 def withdraw_week(request):
     some_day_last_week = timezone.now().date() - timedelta(days=7)
     tomorrow = timezone.now().date() + timedelta(days=1)
-    all_withdraws = models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user)
-    total_uan = models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow).filter(user=request.user).aggregate(Sum("uan"))["uan__sum"]
-    return render(request, "money/week_with.html",context = {'total_uan': total_uan, 'all_withdraws': all_withdraws} )
+    all_withdraws = models.Withdraw.objects.filter(
+        date__gte=some_day_last_week, date__lt=tomorrow
+    ).filter(user=request.user)
+    total_uan = (
+        models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/week_with.html",
+        context={"total_uan": total_uan, "all_withdraws": all_withdraws},
+    )
+
+
+def today_dep(request):
+    today_start = timezone.now().date()
+    today_end = timezone.now().date() + timedelta(days=1)
+    all_deposits = models.Deposit.objects.filter(
+        date__gte=today_start, date__lt=today_end
+    ).filter(user=request.user)
+    total_uan = (
+        models.Deposit.objects.filter(date__gte=today_start, date__lt=today_end)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/today_dep.html",
+        context={"total_uan": total_uan, "all_deposits": all_deposits},
+    )
+
+
+def today_with(request):
+    today_start = timezone.now().date()
+    today_end = timezone.now().date() + timedelta(days=1)
+    all_withdraws = models.Withdraw.objects.filter(
+        date__gte=today_start, date__lt=today_end
+    ).filter(user=request.user)
+    total_uan = (
+        models.Withdraw.objects.filter(date__gte=today_start, date__lt=today_end)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/today_with.html",
+        context={"total_uan": total_uan, "all_withdraws": all_withdraws},
+    )
