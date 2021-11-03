@@ -255,3 +255,37 @@ def today_with(request):
         "money/today_with.html",
         context={"total_uan": total_uan, "all_withdraws": all_withdraws},
     )
+
+def dep_month(request):
+    some_day_last_week = timezone.now().date() - timedelta(days=30)
+    tomorrow = timezone.now().date() + timedelta(days=1)
+    all_deposits = models.Deposit.objects.filter(
+        date__gte=some_day_last_week, date__lt=tomorrow
+    ).filter(user=request.user)
+    total_uan = (
+        models.Deposit.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/deposit_month.html",
+        context={"total_uan": total_uan, "all_deposits": all_deposits},
+    )
+
+def month_with(request):
+    some_day_last_week = timezone.now().date() - timedelta(days=30)
+    tomorrow = timezone.now().date() + timedelta(days=1)
+    all_withdraws = models.Withdraw.objects.filter(
+        date__gte=some_day_last_week, date__lt=tomorrow
+    ).filter(user=request.user)
+    total_uan = (
+        models.Withdraw.objects.filter(date__gte=some_day_last_week, date__lt=tomorrow)
+        .filter(user=request.user)
+        .aggregate(Sum("uan"))["uan__sum"]
+    )
+    return render(
+        request,
+        "money/month_with.html",
+        context={"total_uan": total_uan, "all_withdraws": all_withdraws},
+    )

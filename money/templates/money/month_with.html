@@ -1,0 +1,25 @@
+
+{% extends "money/index.html"%}
+
+{% block title %} All Month Withdraws {% endblock %}
+
+{% block content %}
+  
+<h1>Total :{{ total_uan }}</h1>
+	    {% for uan in latest.uan %}
+		<li>{{ withdraw.date }}</li>
+		<hr>
+	    {% endfor %}
+    <h1>All Withdraws:</h1>
+    <ul> 
+	    {% for withdraw in all_withdraws %}
+		<li>{{ withdraw.uan }}</li>
+		<li>{{ withdraw.title }}</li>
+		<li>{{ withdraw.category }}</li>
+		<li>{{ withdraw.date }}</li>
+		<hr>
+	    {% endfor %}
+    </ul>
+	
+{
+{% endblock %}
