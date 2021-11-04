@@ -1,0 +1,12 @@
+{% extends "money/index.html"%}
+
+
+{% block content %}
+  
+    
+    {% for item in items %}
+        <p>{{ item.title }}</p>
+        <hr>
+    {% endfor %}
+
+{%  endblock %}

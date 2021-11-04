@@ -37,4 +37,5 @@ urlpatterns = [
     path("today_withdraw/", views.today_with, name="today_with"),
     path("deposit_month/", views.dep_month, name="deposit_month"),
     path("withdraw_month/", views.month_with, name="month_with"),
+    path("test/", views.test, name="test"),
 ]

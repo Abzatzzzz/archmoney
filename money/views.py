@@ -48,6 +48,11 @@ class DepCategoryCreateView(CreateView):
     form_class = DepCategoryCreateForm
 
     def form_valid(self, form):
+        exists_categories = models.DepCategory.objects.filter(user=self.request.user)
+        if exists_categories.filter(title=form.cleaned_data['title']).exists():
+            print("category has already exists")
+            return redirect("money:create_dep_category")
+        form.cleaned_data['title']
         service = services.DepCategoryModelService(self.request)
         service.create(form.cleaned_data)
         return redirect("money:depcategories")
@@ -289,3 +294,12 @@ def month_with(request):
         "money/month_with.html",
         context={"total_uan": total_uan, "all_withdraws": all_withdraws},
     )
+
+def test(request):
+    food = 'Защекоины'
+    items = models.DepCategory.objects.filter(user=request.user)
+    print(items)
+    if items.filter(title=food).exists():
+        print('food in items')
+    return render(request, "money/test.html", {'items': items})
+    
