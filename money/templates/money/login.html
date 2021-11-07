@@ -1,11 +1,19 @@
-{% extends "money/index.html"%}
+{% extends "base.html"%}
 
 {% block title %} login page {% endblock %}
 
-{% block content %} 
+{% block header %}
+{% endblock %}
+{% block content1 %} 
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
+{% endblock %}
+{% block content1_detail %}
+{% endblock %}
+{% block content2 %} 
+{% endblock %}
+{% block content2_detail %}
 {% endblock %}

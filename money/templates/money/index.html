@@ -1,51 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<html>
- <head>
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-
+{% extends "base.html" %}
   <title>{% block title %} main page {% endblock %}</title>  
   {% if request.user.is_authenticated %}
-     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-     <div class="container-fluid">
-     <a class="navbar-brand"  href="{% url 'money:index' %}">Home</a> 
-     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a href="{% url 'money:create_dep_category'%}">Deposit Category</a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'money:create_with_category'%}">Withdraw Category</a>
-        </li>
-        <li class="nav-item">
-          <a href="{% url 'money:details'%}">Filter</a>
-        </li>
-        <li class="nav-item">
-          {{ user.username }} <a href="{% url 'money:logout' %}">  Logout </a>     
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-  {% else %}
-     <a href="{% url 'money:register' %}">Register</a> | <a href="{% url 'money:login' %}">Login</a>
+    {%block navigation %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'money:create_dep_category' %}">Доходы</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'money:create_with_category' %}">Расходы</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'money:details' %}">Детали</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'money:logout' %}">Выйти</a></li>
+    {% endblock %}
   {% endif %}
  </head>
-{% block content %}
     {% if messages %}
-        <ul class="messages">
+        <ul>
             {% for message in messages %}
-                <li class="{{ message.tags }}">
+                <li "{{ message.tags }}">
                     {{ message|safe }}
-                    <a href="#" class="close">✖</a>
+                    <a href="#">✖</a>
                 </li>
             {% endfor %}
         </ul>
@@ -53,7 +22,6 @@
 
 
      <body>
-          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
       <h2>Расходы за месяц: {{ negative_balance }}</h2>
       <h2>Доходы за месяц: {{ positive_balance }}</h2>
       <hr>
@@ -64,38 +32,28 @@
 
           <a href='withdraw'><p style="text-align: center"><button><h1>  -  </h1></button></a>
 
-      <h1>Расходы</h1>
-      <br>
+      {% block content1 %} Расходы {% endblock %}
+            {% block content1_detail %}
+          <hr>
       {% for item in all_withdraws %}
-      <div class="card text-center">
-	  <div class="card-header">
 	    {{ item.category }}
-	  </div>
-	  <div class="card-body">
-	    <h5 class="card-title">{{ item.uan }}</h5>
-	    <p class="card-text">{{ item.title }}</p>
-	  </div>
-	  <div class="card-footer text-muted">
+	    <h5 >{{ item.uan }}</h5>
+	    <p>{{ item.title }}</p>
 	    {{ item.date }}
-	  </div>
           <hr>
       {% endfor %}
+            {% endblock %}
       <br>
-      <h1>Доходы</h1>
+      {% block content2 %} Доходы {% endblock %}
+            {% block content2_detail %}
+          <hr>
       {% for item in all_deposits %}
-      <div class="card text-center">
-	  <div class="card-header">
 	    {{ item.category }}
-	  </div>
-	  <div class="card-body">
-	    <h5 class="card-title">{{ item.uan }}</h5>
-	    <p class="card-text">{{ item.title }}</p>
-	  </div>
-	  <div class="card-footer text-muted">
+	    <h5>{{ item.uan }}</h5>
+	    <p>{{ item.title }}</p>
 	    {{ item.date }}
-	  </div>
           <hr>
       {% endfor %}
+            {% endblock %}
      </body>
-{% endblock %}
 </html>
