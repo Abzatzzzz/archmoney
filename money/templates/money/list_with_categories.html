@@ -1,13 +1,13 @@
 {% extends "money/index.html"%}
 
-{% block title %} With Categories {% endblock %}
-
+{% block title %} Dep Categories {% endblock %}
+{% block title2 %}Exists categories</h1>{% endblock %}
+{% block title3 %}{% endblock %}
+{% block plus %}{% endblock %}
 {% block content %}
-  
-    <h1>Exists categories:</h1>
     
     {% for category in categories %}
-        <p>{{ category.title }}</p>
+       <h2> <p>{{ category.title }}</p></h2> 
         <hr>
     {% endfor %}
 

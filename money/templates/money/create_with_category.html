@@ -1,15 +1,20 @@
 {% extends "money/index.html"%}
-  {% block title %} create withdraw category page {% endblock %}
-  {% block content %}
-  <body>
-    <div style="text-align: center;">
-      <h1>Create your Withdraw categories</h1>
-    <form action="" method="post">
-       {% csrf_token %}
-       <table>
-       {{ form.as_p }}
-       </table>
-       <input type="submit" value="Submit" />
-    </form>
- </body>
-  {%  endblock %}
+   {% block title %}create_withdraw_category {% endblock %}
+ {% block title2 %}Создать новую категорию расходов{% endblock %}
+{% block title3 %}{% endblock %}
+{% block plus %}{% endblock %}
+   {% block content %}
+   <body>
+     <div style="text-align: center;">
+       <h2>Введите название категории</h2>
+     <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form.as_p }}
+        </table>
+        <input type="submit" value="Submit" />
+     </form>
+     </div>
+   </body>
+   {%  endblock %}
+

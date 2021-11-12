@@ -33,8 +33,11 @@
             <div class="container px-4 text-center">
                 <h1 class="fw-bolder">{% block title2 %}Статистика за месяц</h1>{% endblock %}
                 <p class="lead">{% block title3 %}Для добавления записей необходимо создать категории{% endblock %}</p>
+                {% block plus %}
                 <a class="btn btn-lg btn-light" href="{% url 'money:deposit' %}">+</a>
                 <a class="btn btn-lg btn-light" href="{% url 'money:withdraw' %}">-</a>
+                <h1>Остаток на счету: {{ total_balance }}</h1>
+                {% endblock %}
             </div>
         </header>
         {% endblock %}

@@ -1,7 +1,12 @@
  {% extends "money/index.html"%}
    {% block title %} withdraw page {% endblock %}
+  {% block title2 %}Расходная операция{% endblock %}
+  <hr>
+  {% block title3 %} Введите сумму и выберите категорию{% endblock %}
+  {% block plus %}{% endblock %}
    {% block content %}
    <body>
+   <hr>
      <div style="text-align: center;">
      <form action="" method="post">
         {% csrf_token %}

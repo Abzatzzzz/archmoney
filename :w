@@ -1,8 +1,6 @@
 {% extends "money/index.html"%}
-   {% block title %}create_deposit_category {% endblock %}
- {% block title2 %}Создать новую категорию доходов{% endblock %}
-{% block title3 %}{% endblock %}
-{% block plus %}{% endblock %}
+   {% block title %}create_withdraw_category {% endblock %}
+ {% block title2 %}Создать новую категорию расходов {% endblock %}
    {% block content %}
    <body>
      <div style="text-align: center;">
@@ -17,4 +15,3 @@
      </div>
    </body>
    {%  endblock %}
-

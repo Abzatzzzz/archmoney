@@ -22,17 +22,9 @@
 
 
      <body>
-      <h2>Расходы за месяц: {{ negative_balance }}</h2>
-      <h2>Доходы за месяц: {{ positive_balance }}</h2>
       <hr>
-      <h1>Остаток на счету: {{ total_balance }}</h1>
-      <hr>
-      
-      <a href='deposit'> <p style="text-align: center"><button><h1>  +  </h1></button></a>
 
-          <a href='withdraw'><p style="text-align: center"><button><h1>  -  </h1></button></a>
-
-      {% block content1 %} Расходы {% endblock %}
+      {% block content1 %} <h2>Расходы за месяц: {{ negative_balance }}</h2>{% endblock %}
             {% block content1_detail %}
           <hr>
       {% for item in all_withdraws %}
@@ -44,7 +36,7 @@
       {% endfor %}
             {% endblock %}
       <br>
-      {% block content2 %} Доходы {% endblock %}
+      {% block content2 %}<h2>Доходы за месяц: {{ positive_balance }}</h2>{% endblock %}
             {% block content2_detail %}
           <hr>
       {% for item in all_deposits %}
