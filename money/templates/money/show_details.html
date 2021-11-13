@@ -8,6 +8,7 @@
 {% block content %}
   
     
+    <div style="text-align: center;">
     <h3><a href="{% url 'money:deposit_archive'%}">All time deposits</a></h3>
     <h3><a href="{% url 'money:withdraw_archive'%}">All time withdraws</a></h3>
     <hr>
@@ -20,5 +21,5 @@
     <h3><a href="{% url 'money:today_dep'%}">Today deposits</a></h3>
     <h3><a href="{% url 'money:today_with'%}">Today withdraws</a></h3>
     <hr>
-
+    </div>   
 {%  endblock %}
